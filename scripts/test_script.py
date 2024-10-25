@@ -12,7 +12,6 @@ import imaplib
 import datetime
 import numpy as np
 
-from http.client import responses
 from threading import Thread
 from matplotlib import pyplot as plt
 from email.mime.image import MIMEImage
@@ -32,13 +31,14 @@ BASE_URL = 'https://api.thingspeak.com'
 WRITE_URL = '{}/update?api_key={}'.format(BASE_URL, API_KEY_WRITE)
 
 READ_CHANNEL_URL = '{}/channels/{}/feeds.json?api_key={}'.format(BASE_URL, CHANNEL_ID, API_KEY_READ)
+
 READ_FIELD_ONE_URL = '{}/channels/{}/fields/{}.json?api_key={}&results={}'.format(BASE_URL, CHANNEL_ID, 1, API_KEY_READ, 10)
 READ_FIELD_TWO_URL = '{}/channels/{}/fields/{}.json?api_key={}&results={}'.format(BASE_URL, CHANNEL_ID, 2, API_KEY_READ, 10)
 READ_FIELD_THREE_URL = '{}/channels/{}/fields/{}.json?api_key={}&results={}'.format(BASE_URL, CHANNEL_ID, 3, API_KEY_READ, 10)
 
 # get and parse to Json
-temp = requests.get(READ_FIELD_ONE_URL)
-illum = requests.get(READ_FIELD_TWO_URL)
+temp = requests.get(READ_FIELD_TWO_URL)
+illum = requests.get(READ_FIELD_ONE_URL)
 humid = requests.get(READ_FIELD_THREE_URL)
 
 tempDataJson = temp.json()
@@ -50,7 +50,7 @@ temp_feeds = tempDataJson['feeds']
 temperature = []
 
 for temps in temp_feeds:
-    temps = float(temps['field1'])
+    temps = float(temps['field2'])
     temperature.append(temps)
 
 # Extract illumination
@@ -58,7 +58,7 @@ illum_feeds = illuminationDataJson['feeds']
 illumination = []
 
 for illums in illum_feeds:
-    illums = float(illums['field2'])
+    illums = float(illums['field1'])
     illumination.append(illums)
 
 # Extract humidity
